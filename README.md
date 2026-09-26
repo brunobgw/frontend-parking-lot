@@ -22,6 +22,41 @@ Pré-requisitos:
 Se a API estiver em outro host/porta, altere `API_BASE_URL` em
 `js/config.js`.
 
+## Como executar com Docker
+
+Como alternativa a abrir o `index.html` direto no navegador, é possível
+servir o frontend com Nginx via Docker.
+
+Pré-requisitos:
+
+1. Docker instalado.
+2. O backend rodando e acessível (ver seção acima). Se o backend também
+   estiver em um container, garanta que ambos consigam se comunicar
+   (mesma rede Docker, ou backend publicado em `localhost`).
+
+Build da imagem:
+
+```
+docker build -t frontend-parking-lot .
+```
+
+Executar o container (aplicação disponível em `http://localhost:8080`):
+
+```
+docker run --rm -p 8080:80 --name frontend-parking-lot frontend-parking-lot
+```
+
+Para parar o container:
+
+```
+docker stop frontend-parking-lot
+```
+
+Caso a API não esteja em `http://localhost:5000`, lembre-se de ajustar
+`API_BASE_URL` em `js/config.js` antes de gerar a imagem (o build da
+imagem precisa ser refeito para que a alteração tenha efeito, já que os
+arquivos são copiados para dentro dela).
+
 ## Estrutura
 
 ```
