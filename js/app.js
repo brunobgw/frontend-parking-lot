@@ -20,8 +20,15 @@
   const modalOcupar = document.getElementById("modal-ocupar");
   const formOcupar = document.getElementById("form-ocupar");
   const inputPlaca = document.getElementById("input-placa");
+  const inputCpfCnpj = document.getElementById("input-cpf-cnpj");
+  const inputObservacao = document.getElementById("input-observacao");
   const ocuparNumeroLabel = document.getElementById("ocupar-numero-label");
+  const btnConfirmarOcupar = formOcupar.querySelector('button[type="submit"]');
   let numeroVagaSelecionada = null;
+
+  inputCpfCnpj.addEventListener("input", () => {
+    inputCpfCnpj.value = inputCpfCnpj.value.replace(/\D/g, "");
+  });
 
   function mensagemErro(erro) {
     return erro && erro.message ? erro.message : "Ocorreu um erro inesperado";
@@ -163,11 +170,28 @@
     const detalhes = coluna.querySelector(".vaga-detalhes");
     if (ocupada) {
       const { minutos, valor } = calcularOcupacao(vaga);
-      detalhes.innerHTML = `
-        Placa: <strong>${vaga.placa}</strong><br>
-        Tempo: ${Ui.formatarDuracao(minutos)}<br>
-        Valor estimado: ${Ui.formatarMoeda(valor)}
-      `;
+      const linhas = [
+        `Placa: <strong>${Ui.escapeHtml(vaga.placa)}</strong>`,
+        `Tempo: ${Ui.formatarDuracao(minutos)}`,
+        `Valor estimado: ${Ui.formatarMoeda(valor)}`,
+      ];
+      if (vaga.cpf_cnpj) {
+        const rotuloDocumento = vaga.cpf_cnpj.length === 14 ? "CNPJ" : "CPF";
+        linhas.push(`${rotuloDocumento}: ${Ui.escapeHtml(Ui.formatarDocumento(vaga.cpf_cnpj))}`);
+      }
+      if (vaga.razao_social) {
+        linhas.push(`Empresa: ${Ui.escapeHtml(vaga.razao_social)}`);
+      }
+      if (vaga.telefone) {
+        linhas.push(`Telefone: ${Ui.escapeHtml(vaga.telefone)}`);
+      }
+      if (vaga.email) {
+        linhas.push(`E-mail: ${Ui.escapeHtml(vaga.email)}`);
+      }
+      if (vaga.observacao) {
+        linhas.push(`Observação: ${Ui.escapeHtml(vaga.observacao)}`);
+      }
+      detalhes.innerHTML = linhas.join("<br>");
     } else {
       detalhes.innerHTML = "Vaga disponível";
     }
@@ -201,6 +225,8 @@
     numeroVagaSelecionada = vaga.numero;
     ocuparNumeroLabel.textContent = vaga.numero;
     inputPlaca.value = "";
+    inputCpfCnpj.value = "";
+    inputObservacao.value = "";
     Ui.abrirModal(modalOcupar);
     inputPlaca.focus();
   }
@@ -213,13 +239,31 @@
     evento.preventDefault();
     const placa = inputPlaca.value.trim().toUpperCase();
     if (!placa) return;
+
+    const cpfCnpj = inputCpfCnpj.value.trim();
+    if (cpfCnpj && cpfCnpj.length !== 11 && cpfCnpj.length !== 14) {
+      Ui.mostrarAlerta("CPF/CNPJ deve ter 11 (CPF) ou 14 (CNPJ) números.", "danger");
+      return;
+    }
+    const observacao = inputObservacao.value.trim();
+
+    const dados = { placa };
+    if (cpfCnpj) dados.cpf_cnpj = cpfCnpj;
+    if (observacao) dados.observacao = observacao;
+
+    const textoOriginalBotao = btnConfirmarOcupar.textContent;
+    btnConfirmarOcupar.disabled = true;
+    btnConfirmarOcupar.textContent = cpfCnpj.length === 14 ? "Consultando CNPJ..." : "Confirmando...";
     try {
-      await Api.ocuparVaga(numeroVagaSelecionada, placa);
+      await Api.ocuparVaga(numeroVagaSelecionada, dados);
       Ui.fecharModal(modalOcupar);
       Ui.mostrarAlerta(`Entrada registrada na vaga ${numeroVagaSelecionada}.`, "success");
       await carregarVagas();
     } catch (erro) {
       Ui.mostrarAlerta(mensagemErro(erro), "danger");
+    } finally {
+      btnConfirmarOcupar.disabled = false;
+      btnConfirmarOcupar.textContent = textoOriginalBotao;
     }
   });
 

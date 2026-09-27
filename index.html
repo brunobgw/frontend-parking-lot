@@ -132,15 +132,43 @@
               <button type="button" class="btn-close" data-fechar-modal></button>
             </div>
             <div class="modal-body">
-              <label class="form-label" for="input-placa">Placa do veículo</label>
-              <input
-                type="text"
-                class="form-control text-uppercase"
-                id="input-placa"
-                maxlength="8"
-                required
-                placeholder="ABC1D23"
-              />
+              <div class="mb-3">
+                <label class="form-label" for="input-placa">Placa do veículo</label>
+                <input
+                  type="text"
+                  class="form-control text-uppercase"
+                  id="input-placa"
+                  maxlength="8"
+                  required
+                  placeholder="ABC1D23"
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="input-cpf-cnpj">CPF/CNPJ do responsável (opcional)</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="input-cpf-cnpj"
+                  inputmode="numeric"
+                  maxlength="14"
+                  placeholder="Somente números"
+                />
+                <div class="form-text">
+                  Informando um CNPJ, a razão social e os dados de contato da
+                  empresa são consultados automaticamente. Para CPF, nenhuma
+                  consulta é feita.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="input-observacao">Observação (opcional)</label>
+                <textarea
+                  class="form-control"
+                  id="input-observacao"
+                  rows="2"
+                  maxlength="500"
+                  placeholder="Ex.: cliente aguardando revisão do veículo"
+                ></textarea>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-fechar-modal>Cancelar</button>

@@ -76,7 +76,10 @@ para funcionar também quando a página é aberta via `file://`.
 - Cadastrar/editar/remover a configuração do estacionamento (área,
   capacidade, preço por hora).
 - Listar vagas e status (livre/ocupada).
-- Registrar entrada de veículo (ocupar vaga) informando a placa.
+- Registrar entrada de veículo (ocupar vaga) informando a placa e,
+  opcionalmente, uma observação e o CPF/CNPJ do responsável. Ao informar um
+  CNPJ, a razão social e os dados de contato (telefone e e-mail) da empresa
+  são consultados automaticamente pelo backend e exibidos no card da vaga.
 - Registrar saída (liberar vaga), com valor estimado calculado no
   frontend a partir do horário de entrada e do preço por hora (mesma
   regra do backend: hora arredondada para cima, mínimo de 1 hora).

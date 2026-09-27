@@ -55,6 +55,23 @@
     return `${ano}-${mes}-${dia}`;
   }
 
+  function escapeHtml(texto) {
+    const div = document.createElement("div");
+    div.textContent = texto == null ? "" : String(texto);
+    return div.innerHTML;
+  }
+
+  function formatarDocumento(documento) {
+    if (!documento) return "";
+    if (documento.length === 14) {
+      return documento.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+    }
+    if (documento.length === 11) {
+      return documento.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    }
+    return documento;
+  }
+
   window.Ui = {
     mostrarAlerta,
     abrirModal,
@@ -63,5 +80,7 @@
     formatarDuracao,
     formatarHora,
     hojeISO,
+    escapeHtml,
+    formatarDocumento,
   };
 })();

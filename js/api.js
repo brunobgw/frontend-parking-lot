@@ -42,10 +42,10 @@
 
     obterVaga: (numero) => request(`/vagas/${numero}`),
 
-    ocuparVaga: (numero, placa) =>
+    ocuparVaga: (numero, dados) =>
       request(`/vagas/${numero}/ocupar`, {
         method: "PUT",
-        body: JSON.stringify({ placa }),
+        body: JSON.stringify(dados),
       }),
 
     liberarVaga: (numero) =>
