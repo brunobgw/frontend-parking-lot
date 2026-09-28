@@ -27,7 +27,7 @@
   let numeroVagaSelecionada = null;
 
   inputCpfCnpj.addEventListener("input", () => {
-    inputCpfCnpj.value = inputCpfCnpj.value.replace(/\D/g, "");
+    inputCpfCnpj.value = Ui.mascararCpfCnpj(inputCpfCnpj.value);
   });
 
   function mensagemErro(erro) {
@@ -240,7 +240,7 @@
     const placa = inputPlaca.value.trim().toUpperCase();
     if (!placa) return;
 
-    const cpfCnpj = inputCpfCnpj.value.trim();
+    const cpfCnpj = inputCpfCnpj.value.replace(/\D/g, "");
     if (cpfCnpj && cpfCnpj.length !== 11 && cpfCnpj.length !== 14) {
       Ui.mostrarAlerta("CPF/CNPJ deve ter 11 (CPF) ou 14 (CNPJ) números.", "danger");
       return;

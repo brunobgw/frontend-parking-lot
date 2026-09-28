@@ -10,18 +10,6 @@ build). Consome a API REST do
 Não precisa de servidor de frontend. Basta abrir o arquivo `index.html`
 diretamente no navegador (duplo clique ou "Abrir com" o navegador).
 
-Pré-requisitos:
-
-1. O backend precisa estar rodando em `http://localhost:5000`
-   (ver README do `backend-parking-lot`).
-2. Conexão com a internet, pois o CSS do Bootstrap é carregado via CDN
-   (`cdn.jsdelivr.net`). Sem internet, baixe o arquivo
-   `bootstrap.min.css` e troque o `<link>` em `index.html` por um
-   caminho local.
-
-Se a API estiver em outro host/porta, altere `API_BASE_URL` em
-`js/config.js`.
-
 ## Como executar com Docker
 
 Como alternativa a abrir o `index.html` direto no navegador, é possível

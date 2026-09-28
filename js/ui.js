@@ -72,6 +72,24 @@
     return documento;
   }
 
+  // Aplica a máscara de CPF (000.000.000-00) ou CNPJ (00.000.000/0000-00)
+  // progressivamente, conforme o usuário digita. Até 11 dígitos usa a
+  // máscara de CPF; a partir do 12º dígito passa para a máscara de CNPJ.
+  function mascararCpfCnpj(valor) {
+    const digitos = (valor || "").replace(/\D/g, "").slice(0, 14);
+    if (digitos.length <= 11) {
+      return digitos
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    }
+    return digitos
+      .replace(/(\d{2})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1/$2")
+      .replace(/(\d{4})(\d{1,2})$/, "$1-$2");
+  }
+
   window.Ui = {
     mostrarAlerta,
     abrirModal,
@@ -82,5 +100,6 @@
     hojeISO,
     escapeHtml,
     formatarDocumento,
+    mascararCpfCnpj,
   };
 })();
